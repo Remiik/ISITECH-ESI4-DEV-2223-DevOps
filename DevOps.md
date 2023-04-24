@@ -73,6 +73,33 @@ L'objectif de ces pratiques est de s'assurer que chaque modificatio du code sour
 
 Les tests unitaires sont des tests automatisés qui permettent de vérifier le bon fonctionnement d'une partie isolée du code, appelée unité. Les unités peuvent être des fonctions, des méthodes ou des classes. Les tests unitaires sont généralement écrits par les développeurs eux-mêmes et sont exécutés à chaque fois que le code est modifié. L'objectif des tests unitaires est de détecter les erreurs de logique et les bugs dès que possible, afin de les corriger rapidement.
 
+Pour cela nous avons besoin d'une bibliotheques de test pour React JS telle que Jest ou encore Enzyme. Pour installer Jest :
+
+```bash
+npm install --save-dev enzyme
+```
+
+Ensuite vous aurez besoin de fichier de test (ex: fichier.test.js) qui contiendra alors une ou plusieurs fonctions a tester. `it` permet de definir un test individuel et `describe` permet de regrouper plusieurs tests ensemble.
+
+Configurer le test : Pour configurer le test, vous pouvez définir les props que vous souhaitez passer à votre composant React et utiliser la méthode mount d'Enzyme pour simuler le rendu du composant.
+
+Exécuter le test : Pour exécuter le test, vous pouvez utiliser la commande npm test. Jest exécutera tous les tests dans votre dossier de test et affichera les résultats dans votre terminal.
+
+```javascript
+import React from "react";
+import { mount } from "enzyme";
+import MyComponent from "./MyComponent";
+
+describe("MyComponent", () => {
+  it("renders the component", () => {
+    const wrapper = mount(<MyComponent title="My Component" />);
+    expect(wrapper.find("h1").text()).toEqual("My Component");
+  });
+});
+```
+
+Dans cet exemple, nous testons si le composant MyComponent est correctement rendu avec le titre "My Component". Nous utilisons la méthode mount d'Enzyme pour simuler le rendu du composant et la méthode expect de Jest pour vérifier si le titre est correctement affiché.
+
 ### Les test d'integration
 
 Les tests d'intégration sont des tests qui vérifient le bon fonctionnement de plusieurs unités de code ensemble, dans un environnement simulé. Ces tests sont généralement écrits par les développeurs et sont exécutés avant que le code ne soit déployé. L'objectif des tests d'intégration est de s'assurer que les différentes parties du code fonctionnent bien ensemble et qu'il n'y a pas de conflits.
