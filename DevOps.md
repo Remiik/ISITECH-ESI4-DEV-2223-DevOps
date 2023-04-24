@@ -73,7 +73,7 @@ L'objectif de ces pratiques est de s'assurer que chaque modificatio du code sour
 
 Les tests unitaires sont des tests automatisés qui permettent de vérifier le bon fonctionnement d'une partie isolée du code, appelée unité. Les unités peuvent être des fonctions, des méthodes ou des classes. Les tests unitaires sont généralement écrits par les développeurs eux-mêmes et sont exécutés à chaque fois que le code est modifié. L'objectif des tests unitaires est de détecter les erreurs de logique et les bugs dès que possible, afin de les corriger rapidement.
 
-Pour cela nous avons besoin d'une bibliotheques de test pour React JS telle que Jest ou encore Enzyme. Pour installer Jest :
+Pour cela nous avons besoin d'une bibliotheques de test pour React JS telle que Jest ou encore Enzyme. Pour installer enzyme :
 
 ```bash
 npm install --save-dev enzyme
