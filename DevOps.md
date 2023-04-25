@@ -106,3 +106,31 @@ Les tests E2E (End-to-End) sont des tests qui vérifient le bon fonctionnement d
 ### En resume : 
 - build de jour: compilation + test unitaires
 - build de nuit: compilation + toutes les categories de test abrodes precedemment + deploiement
+
+
+
+
+## Quelques  bibliotheques de tests pour React
+
+- Jest (meilleur choix pour React)
+- Mocha (bon support navigateur)
+- Chai
+- Jasmine
+- Karma
+- Cypress (e2e base sur mocha)
+
+
+
+## Un peu de vocabulaire: 
+
+- describe('string', ()=> {}): decrit un test et contient un/des test(s) au sein d'un callback
+
+- test('ce qu\'on teste', () => { logique de test }) : permet de declarer un test
+
+- expect() : permet de faire une assertion
+
+- assertion: proposition booleene qui tente de predire un resultat de fonction par exemple
+
+- it: permet de declarer un test
+
+- matcher: fonction qui permet de realiser une assertion ex: toEqual()
