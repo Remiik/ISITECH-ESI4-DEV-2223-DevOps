@@ -108,36 +108,30 @@ Les tests d'intégration sont des tests qui vérifient le bon fonctionnement de 
 
 Les tests E2E (End-to-End) sont des tests qui vérifient le bon fonctionnement de l'application dans son ensemble, de bout en bout. Ils simulent les interactions d'un utilisateur avec l'application, en vérifiant que toutes les fonctionnalités de l'application fonctionnent correctement. Les tests E2E sont généralement écrits par des testeurs ou des automates de test, et sont exécutés avant ou après le déploiement de l'application. L'objectif des tests E2E est de s'assurer que l'application répond aux exigences et aux attentes de l'utilisateur final.
 
+## Les differents types de build
 
-
-
-## Les differents types de build 
-
-### Le build du developpeur / prive / local 
+### Le build du developpeur / prive / local
 
 - Lance manuellement aussi souvent que possible (plus d'une dizaine par jour est un minimum...)
 - Teste les changements apportes par un developpeur
 
+### Le build de ci:
 
-### Le build de ci: 
-- Lancement journalier 
-- Automatique 
+- Lancement journalier
+- Automatique
 - Tester en routine les changements apportes par tous les developpeurs d'une equipe
 
+### Les builds 'overnight' ou nightly:
 
-### Les builds 'overnight' ou nightly: 
 - Lancement journalier par l'outil de CI
 - Test afin de verifier l'etat de la prod, les perf, build d'integration le plus complet possible.
 
+### En resume :
 
-### En resume : 
 - build de jour: compilation + test unitaires
 - build de nuit: compilation + toutes les categories de test abrodes precedemment + deploiement
 
-
-
-
-## Quelques  bibliotheques de tests pour React
+## Quelques bibliotheques de tests pour React
 
 - Jest (meilleur choix pour React)
 - Mocha (bon support navigateur)
@@ -146,9 +140,7 @@ Les tests E2E (End-to-End) sont des tests qui vérifient le bon fonctionnement d
 - Karma
 - Cypress (e2e base sur mocha)
 
-
-
-## Un peu de vocabulaire: 
+## Un peu de vocabulaire:
 
 - describe('string', ()=> {}): decrit un test et contient un/des test(s) au sein d'un callback
 
@@ -161,3 +153,125 @@ Les tests E2E (End-to-End) sont des tests qui vérifient le bon fonctionnement d
 - it: permet de declarer un test
 
 - matcher: fonction qui permet de realiser une assertion ex: toEqual()
+
+### NGINX
+
+NGINX se comporte comme une gateway qui se positionne entre internet et votre backend, quand vous visitez une webapp le premier endroit que vous tentez d'atteindre est un serveur web. Le travail du serveur web est de traiter la ressource demandee par le client:
+
+- la trouver sur le serveur
+- la retourner en tant que reponse
+
+Si vous analysez les headers de beaucoup de reponses http sur le web il y a de grandes chances pour le server soit nginx, cette technologie est extrenment populaire avec des sites a haut traffic. En effet, nginx peut gerer plus de 10 000 connexions entrantes simultanees,
+
+![](assets/nginx_event_loop.png)
+
+Nginx peut donc faire office de serveur web mais est aussi communement utilise en tant que reverse proxy, sert de point de controle afin de distribuer la charge entrante vers differents serveurs backend et fournit un certain niveau niveau de securite et de caching (afin d'ameliorer les performances)
+
+Dans la plupart des cas nginx est installe sur un serveur linux, avec un configuration situee :
+
+```bash
+/etc/nginx/nginx.conf
+```
+
+On peut customiser la configuration nginx en definissant des directives :
+
+```conf
+user nobody;
+error_log /var/log/nginx/error.log; // contexte global ou principal
+
+http {
+  ## contexte http
+}
+
+```
+
+Une directive represente tout simplement une paire cle/valeur, si vous rencontrez une cle suivie d'accolades on parle alors de contexte. Les contextes servent a
+
+L'un des roles principal de nginx est de servir du contenu statique, on peut configurer cela dans le contexte http, dans lequel nous pouvons definir un ou plusieurs serveurs. Chacun de ces serveurs se distingue des autres par le port sur lequel il sera capable d'ecouter. Nginx sera capable d'analyser les requetes serveur entrantes et de les rediriger vers le bon chemin. L'activite generee par le traffic entrant sera loggee au sein du fichier de log correspondant.
+
+```conf
+user nobody;
+error_log /var/log/nginx/error.log; // contexte global ou principal
+
+http {
+  ## contexte http
+  server {
+    listen 80;
+    access_log /var/log/nginx/access.log;
+  }
+}
+
+```
+
+L'un des parametres les plus imporants de nginx est definir le repertoir racine, ou se trouve les fichiers statiques a servir.
+
+```conf
+user nobody;
+error_log /var/log/nginx/error.log; // contexte global ou principal
+
+http {
+  ## contexte http
+  server {
+    listen 80;
+    access_log /var/log/nginx/access.log;
+
+    location / {
+      root /app/www;
+    }
+  }
+}
+
+```
+
+Si un utilisateur navigue alors sur notre domaine, le serveur sera capable de renvoyer le contenu html dans le repertoire `/app/www`
+
+On peut aussi decider de choisir une seconde "location" en definissant une regex pour recuperer tout type d'image au niveau du repertoire contenant les images de notre site web.
+
+```conf
+user nobody;
+error_log /var/log/nginx/error.log; // contexte global ou principal
+
+http {
+  ## contexte http
+  server {
+    listen 80;
+    access_log /var/log/nginx/access.log;
+
+    location / {
+      root /app/www;
+    }
+
+    location ~ \.(gif|jpg|png)$ {
+      root /app/images;
+    }
+  }
+}
+
+```
+
+Reverse proxy : si on remplace root avec proxy pass on peut pointer sur un serveur completement different sur internet
+
+```conf
+http {
+  server {
+    listen 80;
+    access_log /var/log/nginx/access.log;
+
+    location / {
+     #  root /app/www;
+     proxy_pass http://localhost:5000;
+
+    }
+  }
+}
+
+  server {
+    listen 5000;
+    root /app/www;
+
+    location / {
+
+    }
+  }
+
+```
