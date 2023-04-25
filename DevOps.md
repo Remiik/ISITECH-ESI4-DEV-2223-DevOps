@@ -80,3 +80,29 @@ Les tests d'intégration sont des tests qui vérifient le bon fonctionnement de 
 ### Les tests E2E (End-to-End)
 
 Les tests E2E (End-to-End) sont des tests qui vérifient le bon fonctionnement de l'application dans son ensemble, de bout en bout. Ils simulent les interactions d'un utilisateur avec l'application, en vérifiant que toutes les fonctionnalités de l'application fonctionnent correctement. Les tests E2E sont généralement écrits par des testeurs ou des automates de test, et sont exécutés avant ou après le déploiement de l'application. L'objectif des tests E2E est de s'assurer que l'application répond aux exigences et aux attentes de l'utilisateur final.
+
+
+
+
+## Les differents types de build 
+
+### Le build du developpeur / prive / local 
+
+- Lance manuellement aussi souvent que possible (plus d'une dizaine par jour est un minimum...)
+- Teste les changements apportes par un developpeur
+
+
+### Le build de ci: 
+- Lancement journalier 
+- Automatique 
+- Tester en routine les changements apportes par tous les developpeurs d'une equipe
+
+
+### Les builds 'overnight' ou nightly: 
+- Lancement journalier par l'outil de CI
+- Test afin de verifier l'etat de la prod, les perf, build d'integration le plus complet possible.
+
+
+### En resume : 
+- build de jour: compilation + test unitaires
+- build de nuit: compilation + toutes les categories de test abrodes precedemment + deploiement
