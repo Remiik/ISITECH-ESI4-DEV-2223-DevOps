@@ -275,3 +275,20 @@ http {
   }
 
 ```
+
+### Utiliser nginx pour servir du contenu statique
+
+Dans le repertoire `/etc/nginx/conf.d` se trouve le fichier default.conf qui contient la configuration de la page d'accueil par defaut de nginx (welcome).
+Pour ajouter une configuration il suffit d'ajouter un fichier : `www.exemple.com.conf`:
+
+```conf
+server {
+  listen 80 default_server; # definit un serveur virtuel
+  server_name www.exemple.com; # definit le hostname auquel nginx doit attacher un serveur virtuel
+
+  location / {
+    root   /usr/share/nginx/html;
+    index  index.html index.htm;
+  }
+}
+```
